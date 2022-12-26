@@ -5,6 +5,8 @@ namespace NZWalks.API.Repositories.IRepository
     public interface IUnitOfWork
     {
         IRegionRepository Region { get; }
+        IWalkRepository Walk { get; }
+        IWalkDifficultyRepository WalkDifficulty { get; }
 
         Task SaveAsync();
     }

@@ -8,11 +8,15 @@ namespace NZWalks.API.Repositories
     {
         private readonly NZWalksDbContext _db;
         public IRegionRepository Region { get; private set; }
+        public IWalkRepository Walk { get; private set; }
+        public IWalkDifficultyRepository WalkDifficulty { get; private set; }
 
         public UnitOfWork(NZWalksDbContext db)
         {
             _db = db;
             Region = new RegionRepository(_db);
+            Walk = new WalkRepository(_db);
+            WalkDifficulty = new WalkDifficultyRepository(_db);
         }
 
         public async Task SaveAsync()
