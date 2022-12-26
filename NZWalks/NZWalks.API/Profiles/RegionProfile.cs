@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using NZWalks.API.Models.Domain;
-using NZWalks.API.Models.DTO;
+using NZWalks.API.Models.DTO.Regions;
 
 namespace NZWalks.API.Mapping
 {
@@ -10,6 +10,10 @@ namespace NZWalks.API.Mapping
         {
             CreateMap<Region, RegionDTO>().ReverseMap();
             //CreateMap<Region, RegionDTO>().ForMember(dest => dest.Id, option => option.MapFrom(src => src.Id));
+
+            CreateMap<Region, RegionCreateDTO>().ReverseMap();
+            CreateMap<Region, RegionUpdateDTO>().ReverseMap();
+
         }
     }
 }

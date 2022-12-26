@@ -5,6 +5,6 @@ namespace NZWalks.API.Repositories.IRepoitory
 {
     public interface IRegionRepository : IRepository<Region>
     {
-        Task<Region> UpdateAsync(Region entity);
+        Task UpdateAsync(Region entity);
     }
 }

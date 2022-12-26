@@ -1,4 +1,4 @@
-﻿using NZWalks.API.Models.DTO;
+﻿using NZWalks.API.Models.DTO.Regions;
 
 namespace NZWalks.API.Service.IService
 {

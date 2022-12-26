@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NZWalks.API.Data;
 using NZWalks.API.Repository.IRepoitory;
+using System.Linq.Expressions;
 
 namespace NZWalks.API.Repositories.Repository
 {
@@ -15,14 +16,9 @@ namespace NZWalks.API.Repositories.Repository
             dbSet = _db.Set<T>();
         }
 
-        public Task<T> CreateAsync(T entity)
+        public async Task CreateAsync(T entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<T> GetAsync(int id)
-        {
-            throw new NotImplementedException();
+            await dbSet.AddAsync(entity);
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
@@ -30,9 +26,21 @@ namespace NZWalks.API.Repositories.Repository
             return await dbSet.ToListAsync();
         }
 
-        public Task RemoveAsync(T entity)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task RemoveAsync(T entity)
+        {
+            dbSet.Remove(entity);
         }
     }
 }

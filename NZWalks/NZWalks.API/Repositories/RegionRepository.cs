@@ -1,4 +1,5 @@
-﻿using NZWalks.API.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using NZWalks.API.Data;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Repositories.IRepoitory;
 using NZWalks.API.Repositories.Repository;
@@ -14,9 +15,9 @@ namespace NZWalks.API.Repositories
             _db = db;
         }
 
-        public Task<Region> UpdateAsync(Region entity)
+        public async Task UpdateAsync(Region entity)
         {
-            throw new NotImplementedException();
+            _db.Regions.Update(entity);
         }
     }
 }
