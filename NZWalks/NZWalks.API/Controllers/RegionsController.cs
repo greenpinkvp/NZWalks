@@ -47,6 +47,12 @@ namespace NZWalks.API.Controllers
         [ActionName("CreateRegion")]
         public async Task<IActionResult> CreateRegionAsync(RegionCreateDTO regionCreateDTO)
         {
+            //Validate create request
+            if (!ValidateCreateRegionAsync(regionCreateDTO))
+            {
+                return BadRequest(ModelState);
+            }
+
             //Request(DTO) to domain model
             var region = new Region()
             {
@@ -96,6 +102,12 @@ namespace NZWalks.API.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> UpdateRegionAsync([FromRoute] Guid id, [FromBody] RegionUpdateDTO regionUpdateDTO)
         {
+            //Validate update request
+            if (!ValidateUpdateRegionAsync(regionUpdateDTO))
+            {
+                return BadRequest(ModelState);
+            }
+
             var existRegion = await _unitOfWork.Region.GetAsync(x => x.Id == id);
             if (existRegion == null)
             {
@@ -116,5 +128,89 @@ namespace NZWalks.API.Controllers
 
             return Ok(regionDTO);
         }
+
+        #region Private method
+
+        private bool ValidateCreateRegionAsync(RegionCreateDTO regionCreateDTO)
+        {
+            if (regionCreateDTO == null)
+            {
+                ModelState.AddModelError(nameof(regionCreateDTO), $"Region Data is required.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(regionCreateDTO.Code))
+            {
+                ModelState.AddModelError(nameof(regionCreateDTO.Code),
+                    $"{nameof(regionCreateDTO.Code)} cannot be null or empty or white space.");
+            }
+
+            if (string.IsNullOrWhiteSpace(regionCreateDTO.Name))
+            {
+                ModelState.AddModelError(nameof(regionCreateDTO.Name),
+                    $"{nameof(regionCreateDTO.Name)} cannot be null or empty or white space.");
+            }
+
+            if (regionCreateDTO.Area <= 0)
+            {
+                ModelState.AddModelError(nameof(regionCreateDTO.Area),
+                    $"{nameof(regionCreateDTO.Area)} cannot be less than or equal to zero.");
+            }
+
+            if (regionCreateDTO.Population < 0)
+            {
+                ModelState.AddModelError(nameof(regionCreateDTO.Population),
+                    $"{nameof(regionCreateDTO.Population)} cannot be less than zero.");
+            }
+
+            if (ModelState.ErrorCount > 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidateUpdateRegionAsync(RegionUpdateDTO regionUpdateDTO)
+        {
+            if (regionUpdateDTO == null)
+            {
+                ModelState.AddModelError(nameof(regionUpdateDTO), $"Region Data is required.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(regionUpdateDTO.Code))
+            {
+                ModelState.AddModelError(nameof(regionUpdateDTO.Code),
+                    $"{nameof(regionUpdateDTO.Code)} cannot be null or empty or white space.");
+            }
+
+            if (string.IsNullOrWhiteSpace(regionUpdateDTO.Name))
+            {
+                ModelState.AddModelError(nameof(regionUpdateDTO.Name),
+                    $"{nameof(regionUpdateDTO.Name)} cannot be null or empty or white space.");
+            }
+
+            if (regionUpdateDTO.Area <= 0)
+            {
+                ModelState.AddModelError(nameof(regionUpdateDTO.Area),
+                    $"{nameof(regionUpdateDTO.Area)} cannot be less than or equal to zero.");
+            }
+
+            if (regionUpdateDTO.Population < 0)
+            {
+                ModelState.AddModelError(nameof(regionUpdateDTO.Population),
+                    $"{nameof(regionUpdateDTO.Population)} cannot be less than zero.");
+            }
+
+            if (ModelState.ErrorCount > 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion Private method
     }
 }
