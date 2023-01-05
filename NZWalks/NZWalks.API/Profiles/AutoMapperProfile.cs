@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTO.Regions;
+using NZWalks.API.Models.DTO.Users;
 using NZWalks.API.Models.DTO.WalkDifficulties;
 using NZWalks.API.Models.DTO.Walks;
 
@@ -23,6 +24,9 @@ namespace NZWalks.API.Mapping
 
             //WalkDifficultiesProfile
             CreateMap<WalkDifficulty, WalkDifficultyDTO>().ReverseMap();
+
+            //Users
+            CreateMap<User, LoginRequest>().ReverseMap();
         }
     }
 }

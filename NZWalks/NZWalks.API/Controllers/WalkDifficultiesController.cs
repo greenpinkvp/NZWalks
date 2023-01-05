@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTO.WalkDifficulties;
 using NZWalks.API.Repositories.IRepository;
+using System.Data;
 
 namespace NZWalks.API.Controllers
 {
@@ -20,6 +22,7 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetAllWalkDifficultiesAsync()
         {
             var walkDiffulties = await _unitOfWork.WalkDifficulty.GetAllAsync();
@@ -29,6 +32,7 @@ namespace NZWalks.API.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [ActionName("GetWalkDifficultyAsync")]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetWalkDifficultyAsync(Guid id)
         {
             var walkDiffulty = await _unitOfWork.WalkDifficulty.GetAsync(x => x.Id == id);
@@ -42,13 +46,14 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> CreateWalkDifficultyAsync([FromBody] WalkDifficultyCreateDTO walkDifficultyCreateDTO)
         {
             //validate the incoming request
-            if (!ValidateCreateWalkDifficultyAsync(walkDifficultyCreateDTO))
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ValidateCreateWalkDifficultyAsync(walkDifficultyCreateDTO))
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             var walkDifficulty = new WalkDifficulty()
             {
@@ -66,13 +71,14 @@ namespace NZWalks.API.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> UpdateWalkDifficultyAsync([FromRoute] Guid id, [FromBody] WalkDifficultyUpdateDTO walkDifficultyUpdateDTO)
         {
             //validate the incoming request
-            if (!ValidateUpdateWalkDifficultyAsync(walkDifficultyUpdateDTO))
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ValidateUpdateWalkDifficultyAsync(walkDifficultyUpdateDTO))
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             var existWalkDiff = await _unitOfWork.WalkDifficulty.GetAsync(x => x.Id == id);
 
@@ -92,6 +98,7 @@ namespace NZWalks.API.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> DeleteWalkDifficultyAsync([FromRoute] Guid id)
         {
             var walkDiff = await _unitOfWork.WalkDifficulty.GetAsync(x => x.Id == id);

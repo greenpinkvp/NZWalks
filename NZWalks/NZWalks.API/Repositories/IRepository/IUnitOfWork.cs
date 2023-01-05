@@ -7,6 +7,7 @@ namespace NZWalks.API.Repositories.IRepository
         IRegionRepository Region { get; }
         IWalkRepository Walk { get; }
         IWalkDifficultyRepository WalkDifficulty { get; }
+        IUserRepository User { get; }
 
         Task SaveAsync();
     }

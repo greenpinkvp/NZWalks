@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTO.Regions;
@@ -20,6 +21,7 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetAllRegionsAsync()
         {
             var regions = await _unitOfWork.Region.GetAllAsync();
@@ -31,6 +33,7 @@ namespace NZWalks.API.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [ActionName("GetRegion")]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetRegionAsync(Guid id)
         {
             var region = await _unitOfWork.Region.GetAsync(x => x.Id == id);
@@ -45,13 +48,14 @@ namespace NZWalks.API.Controllers
 
         [HttpPost]
         [ActionName("CreateRegion")]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> CreateRegionAsync(RegionCreateDTO regionCreateDTO)
         {
             //Validate create request
-            if (!ValidateCreateRegionAsync(regionCreateDTO))
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ValidateCreateRegionAsync(regionCreateDTO))
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             //Request(DTO) to domain model
             var region = new Region()
@@ -77,6 +81,7 @@ namespace NZWalks.API.Controllers
         [HttpDelete]
         [Route("{id:guid}")]
         [ActionName("DeleteRegion")]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> DeleteRegionAsync(Guid id)
         {
             //get region from db
@@ -100,13 +105,14 @@ namespace NZWalks.API.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> UpdateRegionAsync([FromRoute] Guid id, [FromBody] RegionUpdateDTO regionUpdateDTO)
         {
             //Validate update request
-            if (!ValidateUpdateRegionAsync(regionUpdateDTO))
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ValidateUpdateRegionAsync(regionUpdateDTO))
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             var existRegion = await _unitOfWork.Region.GetAsync(x => x.Id == id);
             if (existRegion == null)
